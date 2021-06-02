@@ -1,44 +1,44 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-connector-import-file-pdf-observables
+  name: {{ .Release.Name }}-connector-import-report
   namespace: {{ .Release.Namespace }}
   labels:
-   app: {{ .Release.Name }}-connector-import-file-pdf-observables
+   app: {{ .Release.Name }}-connector-import-report
 spec:
   replicas: 1
   selector:
     matchLabels:
-     app: {{ .Release.Name }}-connector-import-file-pdf-observables
+     app: {{ .Release.Name }}-connector-import-report
   strategy: {}
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-connector-import-file-pdf-observables
+       app: {{ .Release.Name }}-connector-import-report
     spec:
       containers:
         - env:
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
             - name: CONNECTOR_ID
-              value: {{ .Values.CONNECTOR_HISTORY_CONNECTOR_ID | quote  }}
+              value: {{ .Values.CONNECTOR_IMPORT_REPORT_CONNECTOR_ID | quote  }}
             - name: CONNECTOR_LOG_LEVEL
               value: {{ .Values.LOG_LEVEL }}
             - name: CONNECTOR_NAME
-              value: ImportFilePdfObservables
+              value: ImportReport
             - name: CONNECTOR_ONLY_CONTEXTUAL
               value: {{ .Values.CONNECTOR_ONLY_CONTEXTUAL | quote  }}
-            - name: PDF_OBSERVABLES_CREATE_INDICATOR
-              value: {{ .Values.PDF_OBSERVABLES_CREATE_INDICATOR  | quote  }}
+            - name: IMPORT_REPORT_CREATE_INDICATOR
+              value: {{ .Values.IMPORT_REPORT_CREATE_INDICATOR  | quote  }}
             - name: CONNECTOR_SCOPE
-              value: application/pdf
+              value: application/pdf,text/plain
             - name: CONNECTOR_TYPE
               value: INTERNAL_IMPORT_FILE
             - name: OPENCTI_TOKEN
               value: {{ .Values.OPENCTI_TOKEN  | quote  }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"
-          image: opencti/connector-import-file-pdf-observables:{{ .Chart.AppVersion }}
-          name: connector-import-file-pdf-observables
+          image: opencti/connector-import-report:{{ .Chart.AppVersion }}
+          name: connector-import-report
           resources: {}
       restartPolicy: Always
