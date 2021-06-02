@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-worker
+  name: {{ .Release.Name }}-worker
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-worker
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-worker
+    spec:
+      containers:
+        - env:
+          - name: OPENCTI_TOKEN
+            value: {{ .Values.OPENCTI_TOKEN  | quote  }}
+          - name: OPENCTI_URL
+            value: "http://{{ .Release.Name }}-opencti:8080"
+          - name: WORKER_LOG_LEVEL
+            value: {{ .Values.LOG_LEVEL | quote }}
+          image: opencti/worker:{{ .Chart.AppVersion }}
+          name: worker
+          resources: {}
+      restartPolicy: Always

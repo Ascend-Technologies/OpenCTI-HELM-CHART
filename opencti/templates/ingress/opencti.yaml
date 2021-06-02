@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-ir
+  namespace: {{ .Release.Namespace }}
+spec:
+  tls:
+    - hosts:
+      - {{ .Values.OPENCTI_INGRESS_HOST }}
+      secretName: {{ .Release.OPENCTI_TLS_SECRET }}
+  rules:
+    - host: {{ .Values.OPENCTI_INGRESS_HOST }}
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{ .Release.Name }}-opencti
+            servicePort: 8080

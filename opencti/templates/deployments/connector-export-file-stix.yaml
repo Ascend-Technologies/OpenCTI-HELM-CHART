@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-export-file-stix
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-export-file-stix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-export-file-stix
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-export-file-stix
+    spec:
+      containers:
+        - env:
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ .Values.CONNECTOR_EXPORT_FILE_STIX_CONNECTOR_ID | quote  }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL | quote }}
+            - name: CONNECTOR_NAME
+              value: ExportFileStix2
+            - name: CONNECTOR_SCOPE
+              value: application/json
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_EXPORT_FILE
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+          image: opencti/connector-import-file-pdf-observables:{{ .Chart.AppVersion }}
+          name: connector-export-file-stix
+          resources: {}
+      restartPolicy: Always

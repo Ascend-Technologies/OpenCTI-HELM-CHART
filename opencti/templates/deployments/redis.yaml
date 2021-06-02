@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-redis
+  name: {{ .Release.Name }}-redis
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-redis
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-redis
+    spec:
+      containers:
+        - image: {{ .Values.REDIS_IMAGE | quote }}
+          name: redis
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: {{ .Release.Name }}-redisdata
+      restartPolicy: Always
+      volumes:
+        - name: {{ .Release.Name }}-redisdata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-redisdata

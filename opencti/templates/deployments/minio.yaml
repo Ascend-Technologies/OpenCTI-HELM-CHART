@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-minio
+  name: {{ .Release.Name }}-minio
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-minio
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-minio
+    spec:
+      containers:
+        - args:
+          - server
+          - /data
+          env:
+          - name: MINIO_ACCESS_KEY
+            value: {{ .Values.MINIO_ACCESS_KEY | quote  }}
+          - name: MINIO_SECRET_KEY
+            value: {{ .Values.MINIO_SECRET_KEY  | quote }}
+          image: {{ .Values.MINIO_IMAGE }}
+          livenessProbe:
+            exec:
+              command:
+                - curl
+                - -f
+                - http://localhost:9000/minio/health/live
+            failureThreshold: 3
+            periodSeconds: 30
+            timeoutSeconds: 20
+          name: minio
+          ports:
+            - containerPort: 9000
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: {{ .Release.Name }}-s3data2
+      restartPolicy: Always
+      volumes:
+        - name: {{ .Release.Name }}-s3data2
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-s3data2

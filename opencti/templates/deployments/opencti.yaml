@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-opencti
+  name: {{ .Release.Name }}-opencti
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-opencti
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-opencti
+    spec:
+      containers:
+        - env:
+          - name: APP__ADMIN__EMAIL
+            value: {{ .Values.ADMIN_EMAIL | quote  }}
+          - name: APP__ADMIN__PASSWORD
+            value: {{ .Values.ADMIN_PASSWORD | quote  }}
+          - name: APP__ADMIN__TOKEN
+            value: {{ .Values.OPENCTI_TOKEN | quote }}
+          - name: APP__APP_LOGS__LOGS_LEVEL
+            value: {{ .Values.LOG_LEVEL }}
+          - name: APP__PORT
+            value: "8080"
+          - name: ELASTICSEARCH__URL
+            value: {{ .Values.ELASTICSEARCH_URL | quote }}
+          - name: MINIO__ACCESS_KEY
+            value: {{ .Values.MINIO_ACCESS_KEY | quote }}
+          - name: MINIO__ENDPOINT
+            value: {{ .Release.Name }}-minio
+          - name: MINIO__PORT
+            value: "9000"
+          - name: MINIO__SECRET_KEY
+            value: {{ .Values.MINIO_SECRET_KEY | quote }}
+          - name: MINIO__USE_SSL
+            value: "false"
+          - name: NODE_OPTIONS
+            value: --max-old-space-size=8096
+          - name: PROVIDERS__LOCAL__STRATEGY
+            value: LocalStrategy
+          - name: RABBITMQ__HOSTNAME
+            value: {{ .Release.Name }}-rabbitmq
+          - name: RABBITMQ__MANAGEMENT_SSL
+            value: "false"
+          - name: RABBITMQ__PASSWORD
+            value: {{ .Values.RABBITMQ_DEFAULT_PASS | quote }}
+          - name: RABBITMQ__PORT
+            value: "5672"
+          - name: RABBITMQ__PORT_MANAGEMENT
+            value: "15672"
+          - name: RABBITMQ__USERNAME
+            value: {{ .Values.RABBITMQ_DEFAULT_USER | quote }}
+          - name: REDIS__HOSTNAME
+            value: {{ .Release.Name }}-redis
+          - name: REDIS__PORT
+            value: "6379"
+          image: opencti/platform:{{ .Chart.AppVersion }}
+          name: opencti
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-rabbitmq
+  name: {{ .Release.Name }}-rabbitmq
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-rabbitmq
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+        labels:
+          app: {{ .Release.Name }}-rabbitmq
+    spec:
+      containers:
+        - env:
+          - name: RABBITMQ_DEFAULT_PASS
+            value: {{ .Values.RABBITMQ_DEFAULT_PASS | quote }}
+          - name: RABBITMQ_DEFAULT_USER
+            value: {{ .Values.RABBITMQ_DEFAULT_USER | quote }}
+          image: {{ .Values.RABBITMQ_IMAGE | quote  }}
+          name: rabbitmq
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/rabbitmq
+              name: {{ .Release.Name }}-amqpdata
+      restartPolicy: Always
+      volumes:
+        - name: {{ .Release.Name }}-amqpdata
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-amqpdata
