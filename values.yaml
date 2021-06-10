@@ -51,3 +51,24 @@ CONNECTOR_CVE_CONNECTOR_UPDATE_EXISTING_DATA: "true"
 CONNECTOR_CVE_NVD_DATA_FEED: "https://nvd.nist.gov/feeds/json/cve/1.1/nvdcve-1.1-recent.json.gz"
 CONNECTOR_CVE_HISTORY_DATA_FEED: "https://nvd.nist.gov/feeds/json/cve/1.1/"
 CONNECTOR_CVE_INTERVAL: "1"
+
+
+# CONNECTOR ALIENVAULT
+CONNECTOR_ALIENVAULT_ENABLED: false
+CONNECTOR_ALIENVAULT_CONNECTOR_ID: ""
+CONNECTOR_ALIENVAULT_CONNECTOR_UPDATE_EXISTING_DATA: "true"
+
+CONNECTOR_ALIENVAULT_BASE_URL: "https://otx.alienvault.com"
+CONNECTOR_ALIENVAULT_API_KEY: "ChangeMe"
+CONNECTOR_ALIENVAULT_TLP: "White"
+CONNECTOR_ALIENVAULT_CREATE_OBSERVABLES: "true"
+CONNECTOR_ALIENVAULT_CREATE_INDICATORS: "true"
+CONNECTOR_ALIENVAULT_PULSE_START_TIMESTAMP: "2020-05-01T00:00:00"                  # BEWARE! Could be a lot of pulses!
+CONNECTOR_ALIENVAULT_REPORT_TYPE: "threat-report"
+CONNECTOR_ALIENVAULT_REPORT_STATUS: "New"
+CONNECTOR_ALIENVAULT_GUESS_MALWARE: "false"                                        # Use tags to guess malware.
+CONNECTOR_ALIENVAULT_GUESS_CVE: "false"                                            # Use tags to guess CVE.
+CONNECTOR_ALIENVAULT_EXCLUDED_PULSE_INDICATOR_TYPES: "FileHash-MD5,FileHash-SHA1"  # Excluded Pulse indicator types.
+CONNECTOR_ALIENVAULT_ENABLE_RELATIONSHIPS: "true"                                  # Enable/Disable relationship creation between SDOs.
+CONNECTOR_ALIENVAULT_ENABLE_ATTACK_PATTERNS_INDICATES: "true"                      # Enable/Disable "indicates" relationships between indicators and attack patterns
+CONNECTOR_ALIENVAULT_INTERVAL_SEC: "1800"
