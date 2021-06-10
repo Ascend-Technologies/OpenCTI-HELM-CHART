@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-connector-alienvault
+  name: {{ .Release.Name }}-connector-mitre
   namespace: {{ .Release.Namespace }}
   labels:
-   app: {{ .Release.Name }}-connector-alienvault
+   app: {{ .Release.Name }}-connector-mitre
 spec:
   replicas: 1
   selector:
     matchLabels:
-     app: {{ .Release.Name }}-connector-alienvault
+     app: {{ .Release.Name }}-connector-mitre
   strategy: {}
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-connector-alienvault
+       app: {{ .Release.Name }}-connector-mitre
     spec:
       containers:
         - env:
@@ -45,8 +45,8 @@ spec:
               value: {{ .Values.OPENCTI_TOKEN }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"
-          image: opencti/connector-alienvault:{{ .Chart.AppVersion }}
-          name: connector-alienvault
+          image: opencti/connector-mitre:{{ .Chart.AppVersion }}
+          name: connector-mitre
           resources: {}
       restartPolicy: Always
 {{ end }}
