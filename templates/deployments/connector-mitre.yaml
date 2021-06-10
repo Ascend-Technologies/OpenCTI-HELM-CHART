@@ -25,7 +25,7 @@ spec:
               value: {{ .Values.CONNECTOR_MITRE_PRE_ATTACK_FILE_URL | quote }}     
             - name: MITRE_MOBILE_ATTACK_FILE_URL
               value: {{ .Values.CONNECTOR_MITRE_MOBILE_ATTACK_FILE_URL | quote }}     
-            - name: MITRE_MOBILE_ATTACK_FILE_URL
+            - name: MITRE_INTERVAL
               value: {{ .Values.CONNECTOR_MITRE_INTERVAL | quote }}    
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
