@@ -28,6 +28,8 @@ spec:
             value: {{ .Values.LOG_LEVEL }}
           - name: APP__PORT
             value: "8080"
+          - name: ELASTICSEARCH__SSL__REJECT_UNAUTHORIZED
+            value: {{ .Values.ELASTICSEARCH__SSL__REJECT_UNAUTHORIZED | quote }}
           - name: ELASTICSEARCH__URL
             value: {{ .Values.ELASTICSEARCH_URL | quote }}
           - name: MINIO__ACCESS_KEY
