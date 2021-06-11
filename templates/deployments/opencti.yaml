@@ -32,6 +32,10 @@ spec:
             value: {{ .Values.ELASTICSEARCH__SSL__REJECT_UNAUTHORIZED | quote }}
           - name: ELASTICSEARCH__URL
             value: {{ .Values.ELASTICSEARCH_URL | quote }}
+          - name: ELASTICSEARCH__USERNAME
+            value: {{ .Values.ELASTICSEARCH__USERNAME | quote }}
+          - name: ELASTICSEARCH__PASSWORD
+            value: {{ .Values.ELASTICSEARCH__PASSWORD | quote }}
           - name: MINIO__ACCESS_KEY
             value: {{ .Values.MINIO_ACCESS_KEY | quote }}
           - name: MINIO__ENDPOINT
