@@ -34,7 +34,7 @@ spec:
               value: {{ .Values.OPENCTI_TOKEN | quote }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"
-          image: opencti/connector-import-file-pdf-observables:{{ .Chart.AppVersion }}
+          image: opencti/connector-import-file-stix:{{ .Chart.AppVersion }}
           name: connector-import-file-stix
           resources: {}
       restartPolicy: Always
