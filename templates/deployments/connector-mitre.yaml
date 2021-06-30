@@ -25,12 +25,12 @@ spec:
               value: {{ .Values.CONNECTOR_MITRE_PRE_ATTACK_FILE_URL | quote }}     
             - name: MITRE_MOBILE_ATTACK_FILE_URL
               value: {{ .Values.CONNECTOR_MITRE_MOBILE_ATTACK_FILE_URL | quote }}     
-            - name: MITRE_INTERVAL
+            - name: CONNECTOR_MITRE_INTERVAL
               value: {{ .Values.CONNECTOR_MITRE_INTERVAL | quote }}    
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
             - name: CONNECTOR_ID
-              value: {{ .Values.CONNECTOR_ALIENVAULT_CONNECTOR_ID  | quote }}
+              value: {{ uuidv4 }}
             - name: CONNECTOR_UPDATE_EXISTING_DATA
               value: {{ .Values.CONNECTOR_MITRE_CONNECTOR_UPDATE_EXISTING_DATA | quote }}
             - name: CONNECTOR_LOG_LEVEL

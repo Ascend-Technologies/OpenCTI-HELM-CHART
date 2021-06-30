@@ -1,0 +1,62 @@
+{{ if .Values.CONNECTOR_TAXII_ENABLED }}
+{{- range .Values.TAXII_SERVERS }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-{{ .NAME }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-{{ .NAME }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-{{ .NAME }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-{{ .NAME }}
+    spec:
+      containers:
+        - env:
+            - name: TAXII2_DISCOVERY_URL
+              value: {{ .TAXII2_DISCOVERY_URL | quote  }}
+            - name: TAXII2_USERNAME
+              value: {{ .TAXII2_USERNAME | quote  }}
+            - name: TAXII2_PASSWORD
+              value: {{ .TAXII2_PASSWORD | quote  }}
+            - name: TAXII2_V21
+              value: {{ .TAXII2_V21 | quote  }}
+            - name: TAXII2_COLLECTIONS
+              value: {{ .TAXII2_COLLECTIONS | quote  }}
+            - name: TAXII2_INITIAL_HISTORY
+              value: {{ .TAXII2_INITIAL_HISTORY | quote  }}
+            - name: TAXII2_INTERVAL
+              value: {{ .TAXII2_INTERVAL | quote  }}
+            - name: VERIFY_SSL
+              value: {{ .VERIFY_SSL | quote  }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .CONFIDENCE_LEVEL | quote  }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .UPDATE_EXISTING_DATA | quote }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}        
+            - name: CONNECTOR_NAME
+              value: "TAXII2-{{ .NAME }}"
+            - name: CONNECTOR_SCOPE
+              value: "ipv4-addr,ipv6-addr,vulnerability,domain,url,file-sha256,file-md5,file-sha1"
+            - name: CONNECTOR_TYPE
+              value: EXTERNAL_IMPORT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+          image: opencti/connector-taxii2:{{ .Chart.AppVersion }}
+          name: connector-taxii2-{{ .NAME }}
+          resources: {}
+      restartPolicy: Always
+{{- end }}  
+{{ end }}

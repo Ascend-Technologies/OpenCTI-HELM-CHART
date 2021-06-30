@@ -1,0 +1,88 @@
+{{ if .Values.CONNECTOR_MISP_ENABLED }}
+{{- range .Values.MISP_SERVERS }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-{{ .NAME }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-{{ .NAME }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-{{ .NAME }}
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-{{ .NAME }}
+    spec:
+      containers:
+        - env:
+            - name: MISP_URL
+              value: {{ .MISP_URL | quote  }}
+            - name: MISP_REFERENCE_URL
+              value: {{ .MISP_REFERENCE_URL | quote  }}
+            - name: MISP_KEY
+              value: {{ .MISP_KEY | quote  }}
+            - name: MISP_SSL_VERIFY
+              value: {{ .MISP_SSL_VERIFY | quote  }}
+            - name: MISP_DATETIME_ATTRIBUTE
+              value: {{ .MISP_DATETIME_ATTRIBUTE | quote  }}
+            - name: MISP_CREATE_REPORTS
+              value: {{ .MISP_CREATE_REPORTS | quote  }}
+            - name: MISP_CREATE_INDICATORS
+              value: {{ .MISP_CREATE_INDICATORS | quote  }}
+            - name: MISP_CREATE_OBSERVABLES
+              value: {{ .MISP_CREATE_OBSERVABLES | quote  }}
+            - name: MISP_CREATE_OBJECT_OBSERVABLES
+              value: {{ .MISP_CREATE_OBJECT_OBSERVABLES | quote  }}
+            - name: MISP_REPORT_CLASS
+              value: {{ .MISP_REPORT_CLASS | quote  }}
+            - name: MISP_IMPORT_FROM_DATE
+              value: {{ .MISP_IMPORT_FROM_DATE | quote  }}
+            - name: MISP_IMPORT_TAGS
+              value: {{ .MISP_IMPORT_TAGS | quote  }}
+            - name: MISP_IMPORT_TAGS_NOT
+              value: {{ .MISP_IMPORT_TAGS_NOT | quote  }}
+            - name: MISP_IMPORT_CREATOR_ORGS
+              value: {{ .MISP_IMPORT_CREATOR_ORGS | quote  }}
+            - name: MISP_IMPORT_OWNER_ORGS
+              value: {{ .MISP_IMPORT_OWNER_ORGS | quote  }}
+            - name: MISP_IMPORT_DISTRIBUTION_LEVELS
+              value: {{ .MISP_IMPORT_DISTRIBUTION_LEVELS | quote  }}
+            - name: MISP_IMPORT_THREAT_LEVELS
+              value: {{ .MISP_IMPORT_THREAT_LEVELS | quote  }}
+            - name: MISP_IMPORT_ONLY_PUBLISHED
+              value: {{ .MISP_IMPORT_ONLY_PUBLISHED | quote  }}
+            - name: MISP_IMPORT_WITH_ATTACHMENTS
+              value: {{ .MISP_IMPORT_WITH_ATTACHMENTS | quote  }}
+            - name: MISP_IMPORT_TO_IDS_NO_SCORE
+              value: {{ .MISP_IMPORT_TO_IDS_NO_SCORE | quote  }}
+            - name: MISP_INTERVAL
+              value: {{ .MISP_INTERVAL | quote  }}            
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .CONFIDENCE_LEVEL | quote  }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .UPDATE_EXISTING_DATA | quote }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}        
+            - name: CONNECTOR_NAME
+              value: "MISP-{{ .NAME }}"
+            - name: CONNECTOR_SCOPE
+              value: "ipv4-addr,ipv6-addr,vulnerability,domain,url,file-sha256,file-md5,file-sha1"
+            - name: CONNECTOR_TYPE
+              value: EXTERNAL_IMPORT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+          image: opencti/connector-misp:{{ .Chart.AppVersion }}
+          name: connector-misp-{{ .NAME }}
+          resources: {}
+      restartPolicy: Always
+{{- end }}  
+{{ end }}

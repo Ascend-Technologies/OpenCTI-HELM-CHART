@@ -1,0 +1,52 @@
+{{ if .Values.CONNECTOR_URLHAUS_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-urlhaus
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-urlhaus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-urlhaus
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-urlhaus
+    spec:
+      containers:
+        - env:    
+            - name: URLHAUS_CSV_URL
+              value: {{ .Values.CONNECTOR_URLHAUS_CSV_URL | quote }}
+            - name: URLHAUS_IMPORT_OFFLINE
+              value: {{ .Values.CONNECTOR_URLHAUS_IMPORT_OFFLINE | quote }}
+            - name: URLHAUS_CREATE_INDICATORS
+              value: {{ .Values.CONNECTOR_URLHAUS_CREATE_INDICATORS | quote }}
+            - name: URLHAUS_INTERVAL
+              value: {{ .Values.CONNECTOR_URLHAUS_INTERVAL | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .Values.CONNECTOR_URLHAUS_UPDATE_EXISTING | quote }}
+            - name: CONNECTOR_NAME
+              value: "Abuse.ch URLhaus"
+            - name: CONNECTOR_SCOPE
+              value: "urlhaus"
+            - name: CONNECTOR_TYPE
+              value: EXTERNAL_IMPORT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-urlhaus:{{ .Chart.AppVersion }}
+          name: connector-urlhaus
+          resources: {}
+      restartPolicy: Always
+{{ end }}

@@ -1,0 +1,48 @@
+{{ if .Values.CONNECTOR_VT_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-virustotal
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-virustotal
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-virustotal
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-virustotal
+    spec:
+      containers:
+        - env:
+            - name: VIRUSTOTAL_TOKEN
+              value: {{ .Values.CONNECTOR_VT_TOKEN | quote }}     
+            - name: VIRUSTOTAL_MAX_TLP
+              value: {{ .Values.CONNECTOR_VT_MAX_TLP | quote }}     
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "VirusTotal"
+            - name: CONNECTOR_AUTO
+              value: {{ .Values.CONNECTOR_VT_AUTO | quote }}
+            - name: CONNECTOR_SCOPE
+              value: "StixFile,Artifact"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+          image: opencti/connector-virustotal:{{ .Chart.AppVersion }}
+          name: connector-virustotal
+          resources: {}
+      restartPolicy: Always
+{{ end }}

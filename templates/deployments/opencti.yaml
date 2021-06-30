@@ -64,8 +64,19 @@ spec:
             value: {{ .Values.RABBITMQ_DEFAULT_USER | quote }}
           - name: REDIS__HOSTNAME
             value: {{ .Release.Name }}-redis
-          - name: REDIS__PORT
-            value: "6379"
+          {{ if .Values.SAML_ENABLED }}
+          - name: PROVIDERS__SAML__STRATEGY
+            value: {{ .Values.PROVIDERS__SAML__STRATEGY | quote }}
+          - name: PROVIDERS__SAML__CONFIG__ISSUER
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__ISSUER | quote }}
+          - name: PROVIDERS__SAML__CONFIG__ENTRY_POINT
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__ENTRY_POINT | quote }}
+          - name: PROVIDERS__SAML__CONFIG__SAML_CALLBACK_URL
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__SAML_CALLBACK_URL | quote }}
+          - name: PROVIDERS__SAML__CONFIG__CERT
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__CERT | quote }}
+          {{ end }}
+          
           image: opencti/platform:{{ .Chart.AppVersion }}
           name: opencti
           ports:

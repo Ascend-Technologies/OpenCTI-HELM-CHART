@@ -1,0 +1,56 @@
+{{ if .Values.CONNECTOR_MALPEDIA_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-malpedia
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-malpedia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-malpedia
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-malpedia
+    spec:
+      containers:
+        - env:    
+            - name: MALPEDIA_AUTH_KEY
+              value: {{ .Values.MALPEDIA_AUTH_KEY | quote }}
+            - name: MALPEDIA_INTERVAL_SEC
+              value: {{ .Values.MALPEDIA_INTERVAL_SEC | quote }}
+            - name: MALPEDIA_IMPORT_INTRUSION_SETS
+              value: {{ .Values.MALPEDIA_IMPORT_INTRUSION_SETS | quote }}
+            - name: MALPEDIA_IMPORT_YARA
+              value: {{ .Values.MALPEDIA_IMPORT_YARA | quote }}
+            - name: MALPEDIA_CREATE_INDICATORS
+              value: {{ .Values.MALPEDIA_CREATE_INDICATORS | quote }}          
+            - name: MALPEDIA_CREATE_OBSERVABLES
+              value: {{ .Values.MALPEDIA_CREATE_INDICATORS | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "Malpedia"
+            - name: CONNECTOR_SCOPE
+              value: "malpedia"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .Values.CONNECTOR_MALPEDIA_UPDATE_EXISTING | quote }}
+          image: opencti/connector-malpedia:{{ .Chart.AppVersion }}
+          name: connector-malpedia
+          resources: {}
+      restartPolicy: Always
+{{ end }}

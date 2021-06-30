@@ -1,0 +1,46 @@
+{{ if .Values.CONNECTOR_MALBEACON_ANALYSIS_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-malbeacon
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-malbeacon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-malbeacon
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-malbeacon
+    spec:
+      containers:
+        - env:    
+            - name: MALBEACON_API_KEY
+              value: {{ .Values.CONNECTOR_MALBEACON_API_KEY | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "Malbeacon"
+            - name: CONNECTOR_SCOPE
+              value: "ipv4-addr,ipv6-addr,domain-name"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: CONNECTOR_AUTO
+              value: {{ .Values.CONNECTOR_MALBEACON_AUTO | quote }}
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-malbeacon:{{ .Chart.AppVersion }}
+          name: connector-malbeacon
+          resources: {}
+      restartPolicy: Always
+{{ end }}

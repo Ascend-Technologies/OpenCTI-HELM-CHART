@@ -1,0 +1,50 @@
+{{ if .Values.CONNECTOR_VXVAULT_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-vxvault
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-vxvault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-vxvault
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-vxvault
+    spec:
+      containers:
+        - env:    
+            - name: VXVAULT_URL
+              value: {{ .Values.CONNECTOR_VXVAULT_URL | quote }}
+            - name: VXVAULT_CREATE_INDICATORS
+              value: {{ .Values.CONNECTOR_VXVAULT_CREATE_INDICATORS | quote }}
+            - name: VXVAULT_INTERVAL
+              value: {{ .Values.CONNECTOR_VXVAULT_INTERVAL | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .Values.CONNECTOR_VXVAULT_UPDATE_EXISTING | quote }}
+            - name: CONNECTOR_NAME
+              value: "VX Vault URL list"
+            - name: CONNECTOR_SCOPE
+              value: "vxvault"
+            - name: CONNECTOR_TYPE
+              value: EXTERNAL_IMPORT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-vxvault:{{ .Chart.AppVersion }}
+          name: connector-vxvault
+          resources: {}
+      restartPolicy: Always
+{{ end }}

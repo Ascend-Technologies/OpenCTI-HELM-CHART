@@ -1,0 +1,48 @@
+{{ if .Values.CONNECTOR_IPINFO_ANALYSIS_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-ipinfo
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-ipinfo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-ipinfo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-ipinfo
+    spec:
+      containers:
+        - env:    
+            - name: IPINFO_TOKEN
+              value: {{ .Values.CONNECTOR_IPINFO_TOKEN | quote }}
+            - name: IPINFO_MAX_TLP
+              value: {{ .Values.CONNECTOR_IPINFO_MAX_TLP | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "IpInfo"
+            - name: CONNECTOR_SCOPE
+              value: "IPv4-Addr"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: CONNECTOR_AUTO
+              value:  {{ .Values.CONNECTOR_IPINFO_AUTO | quote }}
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-ipinfo:{{ .Chart.AppVersion }}
+          name: connector-ipinfo
+          resources: {}
+      restartPolicy: Always
+{{ end }}

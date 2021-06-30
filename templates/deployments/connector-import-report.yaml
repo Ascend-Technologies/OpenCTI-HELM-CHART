@@ -21,7 +21,7 @@ spec:
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
             - name: CONNECTOR_ID
-              value: {{ .Values.CONNECTOR_IMPORT_REPORT_CONNECTOR_ID | quote  }}
+              value: {{ uuidv4 }}
             - name: CONNECTOR_LOG_LEVEL
               value: {{ .Values.LOG_LEVEL }}
             - name: CONNECTOR_NAME

@@ -1,0 +1,48 @@
+{{ if .Values.CONNECTOR_ABUSEIPDB_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-abuseipdb
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-abuseipdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-abuseipdb
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-abuseipdb
+    spec:
+      containers:
+        - env:    
+            - name: ABUSEIPDB_API_KEY
+              value: {{ .Values.CONNECTOR_ABUSEIPDB_API_KEY | quote }}
+            - name: ABUSEIPDB_MAX_TLP
+              value: {{ .Values.CONNECTOR_ABUSEIPDB_MAX_TLP | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ uuidv4 }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "AbuseIPDB"
+            - name: CONNECTOR_SCOPE
+              value: "IPv4-Addr"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: CONNECTOR_AUTO
+              value:  {{ .Values.CONNECTOR_ABUSEIPDB_AUTO | quote }}
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-abuseipdb:{{ .Chart.AppVersion }}
+          name: connector-abuseipdb
+          resources: {}
+      restartPolicy: Always
+{{ end }}
