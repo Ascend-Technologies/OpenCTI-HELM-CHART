@@ -26,6 +26,9 @@ spec:
           image: {{ .Values.RABBITMQ_IMAGE | quote  }}
           name: rabbitmq
           resources: {}
+          ports:
+            - containerPort: 5672
+            - containerPort: 15672
           volumeMounts:
             - mountPath: /var/lib/rabbitmq
               name: {{ .Release.Name }}-amqpdata

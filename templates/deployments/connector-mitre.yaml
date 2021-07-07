@@ -30,7 +30,7 @@ spec:
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
             - name: CONNECTOR_ID
-              value: {{ uuidv4 }}
+              value: {{ .Values.CONNECTOR_MITRE_UUID | quote }}
             - name: CONNECTOR_UPDATE_EXISTING_DATA
               value: {{ .Values.CONNECTOR_MITRE_CONNECTOR_UPDATE_EXISTING_DATA | quote }}
             - name: CONNECTOR_LOG_LEVEL

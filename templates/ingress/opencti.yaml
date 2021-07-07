@@ -7,7 +7,7 @@ spec:
   tls:
     - hosts:
       - {{ .Values.OPENCTI_INGRESS_HOST }}
-      secretName: {{ .Release.OPENCTI_TLS_SECRET }}
+      secretName: {{ .Values.OPENCTI_TLS_SECRET }}
   rules:
     - host: {{ .Values.OPENCTI_INGRESS_HOST }}
       http:
