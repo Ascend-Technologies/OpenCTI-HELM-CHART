@@ -20,7 +20,13 @@ spec:
       containers:
         - image: {{ .Values.REDIS_IMAGE | quote }}
           name: redis
-          resources: {}
+          resources: 
+            limits:
+              memory: 1024Mi
+              cpu: "250m"
+            requests:
+              memory: 256Mi
+              cpu: "100m"
           volumeMounts:
             - mountPath: /data
               name: {{ .Release.Name }}-redisdata

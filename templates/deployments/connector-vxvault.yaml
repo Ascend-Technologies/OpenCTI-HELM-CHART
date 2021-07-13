@@ -45,6 +45,12 @@ spec:
               value: "http://{{ .Release.Name }}-opencti:8080"            
           image: opencti/connector-vxvault:{{ .Chart.AppVersion }}
           name: connector-vxvault
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "200m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{ end }}

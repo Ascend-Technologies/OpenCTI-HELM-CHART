@@ -25,7 +25,13 @@ spec:
             value: {{ .Values.RABBITMQ_DEFAULT_USER | quote }}
           image: {{ .Values.RABBITMQ_IMAGE | quote  }}
           name: rabbitmq
-          resources: {}
+          resources: 
+            limits:
+              memory: 1024Mi
+              cpu: 1
+            requests:
+              memory: 800Mi
+              cpu: "150m"
           ports:
             - containerPort: 5672
             - containerPort: 15672

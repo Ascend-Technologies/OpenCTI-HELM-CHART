@@ -36,5 +36,11 @@ spec:
               value: "http://{{ .Release.Name }}-opencti:8080"
           image: opencti/connector-export-file-csv:{{ .Chart.AppVersion }}
           name: connector-export-file-csv
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "200m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always

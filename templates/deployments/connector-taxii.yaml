@@ -56,7 +56,13 @@ spec:
               value: "http://{{ $.Release.Name }}-opencti:8080"
           image: opencti/connector-taxii2:{{ $.Chart.AppVersion }}
           name: connector-taxii2-{{ .NAME }}
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{- end }}  
 {{ end }}

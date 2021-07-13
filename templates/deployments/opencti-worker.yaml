@@ -6,7 +6,7 @@ metadata:
   name: {{ .Release.Name }}-worker
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: 3
+  replicas: {{ .Values.WORKER_REPLICAS  }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-worker
@@ -26,5 +26,11 @@ spec:
             value: {{ .Values.LOG_LEVEL | quote }}
           image: opencti/worker:{{ .Chart.AppVersion }}
           name: worker
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always

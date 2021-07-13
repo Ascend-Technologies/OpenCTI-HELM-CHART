@@ -82,7 +82,13 @@ spec:
               value: "http://{{ $.Release.Name }}-opencti:8080"
           image: opencti/connector-misp:{{ $.Chart.AppVersion }}
           name: connector-misp-{{ .NAME }}
-          resources: {}
+          resources: 
+            limits:
+              memory: 500Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{- end }}  
 {{ end }}

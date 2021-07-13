@@ -68,6 +68,12 @@ spec:
               value: "http://{{ .Release.Name }}-opencti:8080"
           image: opencti/connector-alienvault:{{ .Chart.AppVersion }}
           name: connector-alienvault
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{ end }}

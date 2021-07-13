@@ -43,6 +43,12 @@ spec:
               value: "http://{{ .Release.Name }}-opencti:8080"
           image: opencti/connector-virustotal:{{ .Chart.AppVersion }}
           name: connector-virustotal
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{ end }}

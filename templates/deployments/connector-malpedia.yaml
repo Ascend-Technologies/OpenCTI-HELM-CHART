@@ -51,6 +51,12 @@ spec:
               value: {{ .Values.CONNECTOR_MALPEDIA_UPDATE_EXISTING | quote }}
           image: opencti/connector-malpedia:{{ .Chart.AppVersion }}
           name: connector-malpedia
-          resources: {}
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "250m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
       restartPolicy: Always
 {{ end }}

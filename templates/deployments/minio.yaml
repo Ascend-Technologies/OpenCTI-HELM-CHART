@@ -39,7 +39,13 @@ spec:
           name: minio
           ports:
             - containerPort: 9000
-          resources: {}
+          resources: 
+            limits:
+              memory: 512Mi
+              cpu: "250m"
+            requests:
+              memory: 256Mi
+              cpu: "100m"
           volumeMounts:
             - mountPath: /data
               name: {{ .Release.Name }}-s3data2

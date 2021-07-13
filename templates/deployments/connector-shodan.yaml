@@ -1,48 +1,48 @@
-{{ if .Values.CONNECTOR_ABUSEIPDB_ENABLED }}
+{{ if .Values.CONNECTOR_SHODAN_ENABLED }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-connector-abuseipdb
+  name: {{ .Release.Name }}-connector-shodan
   namespace: {{ .Release.Namespace }}
   labels:
-   app: {{ .Release.Name }}-connector-abuseipdb
+   app: {{ .Release.Name }}-connector-shodan
 spec:
   replicas: 1
   selector:
     matchLabels:
-     app: {{ .Release.Name }}-connector-abuseipdb
+     app: {{ .Release.Name }}-connector-shodan
   strategy: {}
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-connector-abuseipdb
+       app: {{ .Release.Name }}-connector-shodan
     spec:
       containers:
         - env:    
-            - name: ABUSEIPDB_API_KEY
-              value: {{ .Values.CONNECTOR_ABUSEIPDB_API_KEY | quote }}
-            - name: ABUSEIPDB_MAX_TLP
-              value: {{ .Values.CONNECTOR_ABUSEIPDB_MAX_TLP | quote }}
+            - name: SHODAN_TOKEN
+              value: {{ .Values.CONNECTOR_SHODAN_TOKEN| quote }}
+            - name: SHODAN_MAX_TLP
+              value: {{ .Values.CONNECTOR_SHODAN_MAX_TLP | quote }}
             - name: CONNECTOR_CONFIDENCE_LEVEL
               value: {{ .Values.CONFIDENCE_LEVEL | quote }}
             - name: CONNECTOR_ID
-              value: {{ .Values.CONNECTOR_ABUSEIPDB_UUID | quote }}
+              value: {{ .Values.CONNECTOR_SHODAN_UUID | quote }}
             - name: CONNECTOR_LOG_LEVEL
               value: {{ .Values.LOG_LEVEL }}      
             - name: CONNECTOR_NAME
-              value: "AbuseIPDB"
+              value: "Shodan"
             - name: CONNECTOR_SCOPE
               value: "IPv4-Addr"
             - name: CONNECTOR_TYPE
               value: INTERNAL_ENRICHMENT
             - name: CONNECTOR_AUTO
-              value:  {{ .Values.CONNECTOR_ABUSEIPDB_AUTO | quote }}
+              value:  {{ .Values.CONNECTOR_SHODAN_AUTO | quote }}
             - name: OPENCTI_TOKEN
               value: {{ .Values.OPENCTI_TOKEN }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"            
-          image: opencti/connector-abuseipdb:{{ .Chart.AppVersion }}
-          name: connector-abuseipdb
+          image: 91ab06f14e/connector-shodan:latest
+          name: connector-shodan
           resources: 
             limits:
               memory: 256Mi
