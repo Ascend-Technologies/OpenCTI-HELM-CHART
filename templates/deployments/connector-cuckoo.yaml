@@ -1,0 +1,67 @@
+
+{{ if .Values.CONNECTOR_CUCKOO_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-cuckoo
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-cuckoo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-cuckoo
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-cuckoo
+    spec:
+      containers:
+        - env:
+            - name: CUCKOO_CREATE_INDICATORS
+              value: {{ .Values.CONNECTOR_CUCKOO_CREATE_INDICATORS | quote }}     
+            - name: CUCKOO_ENABLE_NETWORK_TRAFFIC
+              value: {{ .Values.CONNECTOR_CUCKOO_ENABLE_NETWORK_TRAFFIC | quote }}     
+            - name: CUCKOO_ENABLE_REGISTRY_KEYS
+              value: {{ .Values.CONNECTOR_CUCKOO_ENABLE_REGISTRY_KEYS | quote }}     
+            - name: CUCKOO_TLP
+              value: {{ .Values.CONNECTOR_CUCKOO_TLP | quote }}     
+            - name: CUCKOO_API_URL
+              value: {{ .Values.CONNECTOR_CUCKOO_API_URL | quote }} 
+            - name: CUCKOO_BASE_URL
+              value: {{ .Values.CONNECTOR_CUCKOO_BASE_URL | quote }}     
+            - name: CUCKOO_INTERVAL
+              value: {{ .Values.CONNECTOR_CUCKOO_INTERVAL | quote }}
+            - name: CUCKOO_REPORT_HISTORY_TIME
+              value: {{ .Values.CONNECTOR_CUCKOO_REPORT_HISTORY_TIME | quote }}    
+            - name: VERIFY_SSL
+              value: {{ .Values.CONNECTOR_CUCKOO_VERIFY_SSL | quote }}    
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote  }}
+            - name: CONNECTOR_ID
+              value: {{ .Values.CONNECTOR_CUCKOO_UUID | quote }}
+            - name: CONNECTOR_UPDATE_EXISTING_DATA
+              value: {{ .Values.CONNECTOR_CUCKOO_UPDATE_EXISTING_DATA | quote }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "Cuckoo Sandbox"
+            - name: CONNECTOR_TYPE
+              value: EXTERNAL_IMPORT
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"
+          image: 91ab06f14e/connector-cuckoo:latest #opencti/connector-cuckoo:{{ .Chart.AppVersion }}
+          name: connector-cuckoo
+          resources: 
+            limits:
+              memory: 2048Mi
+              cpu: "500m"
+            requests:
+              memory: 512Mi
+              cpu: "100m"
+      restartPolicy: Always
+{{ end }}

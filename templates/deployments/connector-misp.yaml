@@ -46,14 +46,22 @@ spec:
               value: {{ .MISP_IMPORT_TAGS | quote  }}
             - name: MISP_IMPORT_TAGS_NOT
               value: {{ .MISP_IMPORT_TAGS_NOT | quote  }}
+            {{ if .MISP_IMPORT_CREATOR_ORGS }}
             - name: MISP_IMPORT_CREATOR_ORGS
               value: {{ .MISP_IMPORT_CREATOR_ORGS | quote  }}
+            {{ end }}
+            {{ if .MISP_IMPORT_OWNER_ORGS }}
             - name: MISP_IMPORT_OWNER_ORGS
               value: {{ .MISP_IMPORT_OWNER_ORGS | quote  }}
+            {{ end }}
+            {{ if .MISP_IMPORT_DISTRIBUTION_LEVELS }}
             - name: MISP_IMPORT_DISTRIBUTION_LEVELS
               value: {{ .MISP_IMPORT_DISTRIBUTION_LEVELS | quote  }}
+            {{ end }}
+            {{ if .MISP_IMPORT_THREAT_LEVELS }}
             - name: MISP_IMPORT_THREAT_LEVELS
               value: {{ .MISP_IMPORT_THREAT_LEVELS | quote  }}
+            {{ end }}
             - name: MISP_IMPORT_ONLY_PUBLISHED
               value: {{ .MISP_IMPORT_ONLY_PUBLISHED | quote  }}
             - name: MISP_IMPORT_WITH_ATTACHMENTS
