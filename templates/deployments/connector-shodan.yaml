@@ -41,7 +41,7 @@ spec:
               value: {{ .Values.OPENCTI_TOKEN }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"            
-          image: 91ab06f14e/connector-shodan:latest
+          image: opencti/connector-shodan:latest
           name: connector-shodan
           resources: 
             limits:
