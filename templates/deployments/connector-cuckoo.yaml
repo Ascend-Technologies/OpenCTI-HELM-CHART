@@ -20,6 +20,10 @@ spec:
     spec:
       containers:
         - env:
+            - name: CUCKOO_START_TASK_ID
+              value: {{ .Values.CONNECTOR_CUCKOO_START_TASK_ID | quote }} 
+            - name: CUCKOO_REPORT_SCORE
+              value: {{ .Values.CONNECTOR_CUCKOO_REPORT_SCORE | quote }}     
             - name: CUCKOO_CREATE_INDICATORS
               value: {{ .Values.CONNECTOR_CUCKOO_CREATE_INDICATORS | quote }}     
             - name: CUCKOO_ENABLE_NETWORK_TRAFFIC

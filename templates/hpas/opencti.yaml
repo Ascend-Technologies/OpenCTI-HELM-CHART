@@ -1,0 +1,12 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Release.Name }}-opencti-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Release.Name }}-opencti
+  minReplicas: {{ .Values.OPENCTI_REPLICAS_MIN }}
+  maxReplicas: {{ .Values.OPENCTI_REPLICAS_MAX }}
+  targetCPUUtilizationPercentage: 50

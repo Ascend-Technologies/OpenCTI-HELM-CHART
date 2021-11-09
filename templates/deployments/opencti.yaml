@@ -6,7 +6,7 @@ metadata:
   name: {{ .Release.Name }}-opencti
   namespace: {{ .Release.Namespace }}
 spec:
-  replicas: {{ .Values.HA_REPLICAS  }}
+  replicas: {{ .Values.OPENCTI_REPLICAS_MIN }}
   selector:
     matchLabels:
       app: {{ .Release.Name }}-opencti
@@ -46,6 +46,20 @@ spec:
             value: {{ .Values.MINIO_SECRET_KEY | quote }}
           - name: MINIO__USE_SSL
             value: "false"
+          - name: SMTP__HOSTNAME
+            value: {{ .Values.SMTP__HOSTNAME | quote }}
+          - name: SMTP__USE_SSL
+            value: {{ .Values.SMTP__USE_SSL | quote }}
+          - name: SMTP__REJECT_UNAUTHORIZED
+            value: {{ .Values.SMTP__REJECT_UNAUTHORIZED | quote }}
+          - name: SMTP__PORT
+            value: {{ .Values.SMTP__PORT | quote }}
+          - name: SMTP__USERNAME
+            value: {{ .Values.SMTP__USERNAME | quote }}
+          - name: SMTP__PASSWORD
+            value: {{ .Values.SMTP__PASSWORD | quote }}
+          - name: SMTP__FROM_EMAIL
+            value: {{ .Values.SMTP__FROM_EMAIL | quote }}
           - name: NODE_OPTIONS
             value: --max-old-space-size=8096
           - name: PROVIDERS__LOCAL__STRATEGY

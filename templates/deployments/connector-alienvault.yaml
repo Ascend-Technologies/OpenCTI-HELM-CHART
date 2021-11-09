@@ -70,10 +70,10 @@ spec:
           name: connector-alienvault
           resources: 
             limits:
-              memory: 256Mi
+              memory: 512Mi
               cpu: "250m"
             requests:
-              memory: 56Mi
+              memory: 256Mi
               cpu: "100m"
       restartPolicy: Always
 {{ end }}

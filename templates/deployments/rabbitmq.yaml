@@ -19,6 +19,8 @@ spec:
     spec:
       containers:
         - env:
+          - name: RABBITMQ_CONSUMER_TIMEOUT
+            value: "8600000"
           - name: RABBITMQ_DEFAULT_PASS
             value: {{ .Values.RABBITMQ_DEFAULT_PASS | quote }}
           - name: RABBITMQ_DEFAULT_USER
@@ -27,10 +29,10 @@ spec:
           name: rabbitmq
           resources: 
             limits:
-              memory: 1024Mi
+              memory: 3048Mi
               cpu: 1
             requests:
-              memory: 800Mi
+              memory: 2048Mi
               cpu: "150m"
           ports:
             - containerPort: 5672
