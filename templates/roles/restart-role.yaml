@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-restart-act 
+  namespace: {{ .Release.Namespace }}
+rules:
+  - apiGroups: ["apps", "extensions"]
+    resources: ["deployments"]
+#    resourceNames: ["<YOUR DEPLOYMENT NAME>"]
+    verbs: ["get", "patch", "list", "watch"] 

@@ -1,0 +1,28 @@
+{{ if .Values.CONNECTOR_TAXII_ENABLED }}
+{{- range .Values.TAXII_SERVERS }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $.Release.Name }}-deployment-restart-{{ .NAME }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  concurrencyPolicy: Forbid
+  schedule: '0 */2 * * *' # cron spec of time, here, 8 o'clock
+  jobTemplate:
+    spec:
+      backoffLimit: 2 
+      activeDeadlineSeconds: 600 
+      template:
+        spec:
+          serviceAccountName: {{ $.Release.Name }}-restart-act 
+          restartPolicy: Never
+          containers:
+            - name: kubectl
+              image: bitnami/kubectl 
+              command:
+                - 'kubectl'
+                - 'rollout'
+                - 'restart'
+                - 'deployment/{{ $.Release.Name }}-connector-{{ .NAME }}'
+{{- end }}  
+{{ end }}

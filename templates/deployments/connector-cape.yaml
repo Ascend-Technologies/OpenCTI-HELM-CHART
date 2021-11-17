@@ -54,7 +54,7 @@ spec:
               value: {{ .Values.OPENCTI_TOKEN }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"
-          image: opencti/connector-cape:{{ .Chart.AppVersion }}
+          image: 91ab06f14e/connector-cape:latest #opencti/connector-cape:{{ .Chart.AppVersion }}
           name: connector-cape
           resources: 
             limits:

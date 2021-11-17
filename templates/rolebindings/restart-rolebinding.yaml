@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: deployment-restart-rbc
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-restart-act 
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-restart-act 
+    namespace: {{ .Release.Namespace }}
