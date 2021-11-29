@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-connector-import-report
+  name: {{ .Release.Name }}-connector-import-document
   namespace: {{ .Release.Namespace }}
   labels:
-   app: {{ .Release.Name }}-connector-import-report
+   app: {{ .Release.Name }}-connector-import-document
 spec:
   replicas: 1
   selector:
     matchLabels:
-     app: {{ .Release.Name }}-connector-import-report
+     app: {{ .Release.Name }}-connector-import-document
   strategy: {}
   template:
     metadata:
       labels:
-       app: {{ .Release.Name }}-connector-import-report
+       app: {{ .Release.Name }}-connector-import-document
     spec:
       containers:
         - env:
