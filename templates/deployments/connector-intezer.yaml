@@ -1,0 +1,64 @@
+{{ if .Values.CONNECTOR_INTEZER_ENABLED }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-connector-intezer
+  namespace: {{ .Release.Namespace }}
+  labels:
+   app: {{ .Release.Name }}-connector-intezer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+     app: {{ .Release.Name }}-connector-intezer
+  strategy: {}
+  template:
+    metadata:
+      labels:
+       app: {{ .Release.Name }}-connector-intezer
+    spec:
+      containers:
+        - env:    
+            - name: INTEZER_SANDBOX_API_KEY
+              value: {{ .Values.CONNECTOR_INTEZER_APIKEY| quote }}
+            - name: INTEZER_SANDBOX_MAX_TLP
+              value: {{ .Values.CONNECTOR_INTEZER_MAX_TLP | quote }}
+            - name: INTEZER_SANDBOX_FAMILY_COLOR
+              value: {{ .Values.CONNECTOR_INTEZER_FAMILY_COLOR | quote }}
+            - name: INTEZER_SANDBOX_MALICIOUS_COLOR
+              value: {{ .Values.CONNECTOR_INTEZER_MALICIOUS_COLOR | quote }}
+            - name: INTEZER_SANDBOX_TRUSTED_COLOR
+              value: {{ .Values.CONNECTOR_INTEZER_TRUSTED_COLOR | quote }}
+            - name: INTEZER_SANDBOX_UNKNOWN_COLOR
+              value: {{ .Values.CONNECTOR_INTEZER_UNKNOWN_COLOR | quote }}
+            - name: INTEZER_SANDBOX_SUSPICIOUS_COLOR
+              value: {{ .Values.CONNECTOR_INTEZER_SUSPICIOUS_COLOR | quote }}
+            - name: CONNECTOR_CONFIDENCE_LEVEL
+              value: {{ .Values.CONFIDENCE_LEVEL | quote }}
+            - name: CONNECTOR_ID
+              value: {{ .Values.CONNECTOR_INTEZER_UUID | quote }}
+            - name: CONNECTOR_LOG_LEVEL
+              value: {{ .Values.LOG_LEVEL }}      
+            - name: CONNECTOR_NAME
+              value: "IntezerSandbox"
+            - name: CONNECTOR_SCOPE
+              value: "Artifact"
+            - name: CONNECTOR_TYPE
+              value: INTERNAL_ENRICHMENT
+            - name: CONNECTOR_AUTO
+              value:  {{ .Values.CONNECTOR_INTEZER_AUTO | quote }}
+            - name: OPENCTI_TOKEN
+              value: {{ .Values.OPENCTI_TOKEN }}
+            - name: OPENCTI_URL
+              value: "http://{{ .Release.Name }}-opencti:8080"            
+          image: opencti/connector-intezer-sandbox:{{ .Chart.AppVersion }}
+          name: connector-intezer
+          resources: 
+            limits:
+              memory: 256Mi
+              cpu: "200m"
+            requests:
+              memory: 56Mi
+              cpu: "100m"
+      restartPolicy: Always
+{{ end }}
