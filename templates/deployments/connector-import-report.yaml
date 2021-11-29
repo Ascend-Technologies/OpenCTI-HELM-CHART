@@ -25,21 +25,23 @@ spec:
             - name: CONNECTOR_LOG_LEVEL
               value: {{ .Values.LOG_LEVEL }}
             - name: CONNECTOR_NAME
-              value: ImportReport
+              value: ImportDocument
             - name: CONNECTOR_ONLY_CONTEXTUAL
               value: {{ .Values.CONNECTOR_ONLY_CONTEXTUAL | quote  }}
-            - name: IMPORT_REPORT_CREATE_INDICATOR
+            - name: IMPORT_DOCUMENT_CREATE_INDICATOR
               value: {{ .Values.IMPORT_REPORT_CREATE_INDICATOR  | quote  }}
             - name: CONNECTOR_SCOPE
-              value: application/pdf,text/plain
+              value: application/pdf,text/plain,text/html
+            - name: CONNECTOR_VALIDATE_BEFORE_IMPORT
+              value: "true"
             - name: CONNECTOR_TYPE
               value: INTERNAL_IMPORT_FILE
             - name: OPENCTI_TOKEN
               value: {{ .Values.OPENCTI_TOKEN  | quote  }}
             - name: OPENCTI_URL
               value: "http://{{ .Release.Name }}-opencti:8080"
-          image: opencti/connector-import-report:{{ .Chart.AppVersion }}
-          name: connector-import-report
+          image: opencti/connector-import-document:{{ .Chart.AppVersion }}
+          name: connector-import-document
           resources: 
             limits:
               memory: 256Mi
