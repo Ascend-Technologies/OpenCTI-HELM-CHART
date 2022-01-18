@@ -8,7 +8,7 @@ spec:
   schedule: '0 * * * *' # cron spec of time, here, 8 o'clock
   jobTemplate:
     spec:
-      backoffLimit: 2 
+      backoffLimit: 5 
       activeDeadlineSeconds: 600 
       template:
         spec:

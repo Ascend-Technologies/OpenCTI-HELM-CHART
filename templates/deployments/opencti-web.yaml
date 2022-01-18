@@ -1,0 +1,105 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ .Release.Name }}-opencti-web
+  name: {{ .Release.Name }}-opencti-web
+  namespace: {{ .Release.Namespace }}
+spec:
+  replicas: {{ .Values.OPENCTI_REPLICAS_MIN }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-opencti-web
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-opencti-web
+    spec:
+      containers:
+        - env:
+          - name: APP__ADMIN__EMAIL
+            value: {{ .Values.ADMIN_EMAIL | quote  }}
+          - name: APP__ADMIN__PASSWORD
+            value: {{ .Values.ADMIN_PASSWORD | quote  }}
+          - name: APP__ADMIN__TOKEN
+            value: {{ .Values.OPENCTI_TOKEN | quote }}
+          - name: APP__APP_LOGS__LOGS_LEVEL
+            value: {{ .Values.LOG_LEVEL }}
+          - name: APP__PORT
+            value: "8080"
+          - name: ELASTICSEARCH__SSL__REJECT_UNAUTHORIZED
+            value: {{ .Values.ELASTICSEARCH__SSL__REJECT_UNAUTHORIZED | quote }}
+          - name: ELASTICSEARCH__URL
+            value: {{ .Values.ELASTICSEARCH__URL | quote }}
+          - name: ELASTICSEARCH__USERNAME
+            value: {{ .Values.ELASTICSEARCH__USERNAME | quote }}
+          - name: ELASTICSEARCH__PASSWORD
+            value: {{ .Values.ELASTICSEARCH__PASSWORD | quote }}
+          - name: MINIO__ACCESS_KEY
+            value: {{ .Values.MINIO_ACCESS_KEY | quote }}
+          - name: MINIO__ENDPOINT
+            value: {{ .Release.Name }}-minio
+          - name: MINIO__PORT
+            value: "9000"
+          - name: MINIO__SECRET_KEY
+            value: {{ .Values.MINIO_SECRET_KEY | quote }}
+          - name: MINIO__USE_SSL
+            value: "false"
+          - name: SMTP__HOSTNAME
+            value: {{ .Values.SMTP__HOSTNAME | quote }}
+          - name: SMTP__USE_SSL
+            value: {{ .Values.SMTP__USE_SSL | quote }}
+          - name: SMTP__REJECT_UNAUTHORIZED
+            value: {{ .Values.SMTP__REJECT_UNAUTHORIZED | quote }}
+          - name: SMTP__PORT
+            value: {{ .Values.SMTP__PORT | quote }}
+          - name: SMTP__USERNAME
+            value: {{ .Values.SMTP__USERNAME | quote }}
+          - name: SMTP__PASSWORD
+            value: {{ .Values.SMTP__PASSWORD | quote }}
+          - name: SMTP__FROM_EMAIL
+            value: {{ .Values.SMTP__FROM_EMAIL | quote }}
+          - name: NODE_OPTIONS
+            value: --max-old-space-size=8096
+          - name: PROVIDERS__LOCAL__STRATEGY
+            value: LocalStrategy
+          - name: RABBITMQ__HOSTNAME
+            value: {{ .Release.Name }}-rabbitmq
+          - name: RABBITMQ__MANAGEMENT_SSL
+            value: "false"
+          - name: RABBITMQ__PASSWORD
+            value: {{ .Values.RABBITMQ_DEFAULT_PASS | quote }}
+          - name: RABBITMQ__PORT
+            value: "5672"
+          - name: RABBITMQ__PORT_MANAGEMENT
+            value: "15672"
+          - name: RABBITMQ__USERNAME
+            value: {{ .Values.RABBITMQ_DEFAULT_USER | quote }}
+          - name: REDIS__HOSTNAME
+            value: {{ .Release.Name }}-redis
+          {{ if .Values.SAML_ENABLED }}
+          - name: PROVIDERS__SAML__STRATEGY
+            value: {{ .Values.PROVIDERS__SAML__STRATEGY | quote }}
+          - name: PROVIDERS__SAML__CONFIG__ISSUER
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__ISSUER | quote }}
+          - name: PROVIDERS__SAML__CONFIG__ENTRY_POINT
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__ENTRY_POINT | quote }}
+          - name: PROVIDERS__SAML__CONFIG__SAML_CALLBACK_URL
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__SAML_CALLBACK_URL | quote }}
+          - name: PROVIDERS__SAML__CONFIG__CERT
+            value: {{ .Values.PROVIDERS__SAML__CONFIG__CERT | quote }}
+          {{ end }}
+          
+          image: opencti/platform:{{ .Chart.AppVersion }}
+          name: opencti
+          ports:
+            - containerPort: 8080
+          resources: 
+            limits:
+              memory: 2048Mi
+              cpu: "1500m"
+            requests:
+              memory: 256Mi
+              cpu: 1
+      restartPolicy: Always

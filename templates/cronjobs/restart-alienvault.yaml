@@ -1,14 +1,14 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: deployment-restart-workers
+  name: deployment-restart-alienvault
   namespace: {{ .Release.Namespace }}
 spec:
   concurrencyPolicy: Forbid
   schedule: '0 * * * *' # cron spec of time, here, 8 o'clock
   jobTemplate:
     spec:
-      backoffLimit: 5 
+      backoffLimit: 5
       activeDeadlineSeconds: 600 
       template:
         spec:
@@ -21,4 +21,4 @@ spec:
                 - 'kubectl'
                 - 'rollout'
                 - 'restart'
-                - 'deployment/{{ .Release.Name }}-worker'
+                - 'deployment/{{ .Release.Name }}-connector-alienvault'
