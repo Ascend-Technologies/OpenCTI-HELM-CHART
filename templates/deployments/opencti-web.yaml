@@ -94,7 +94,23 @@ spec:
           image: opencti/platform:{{ .Chart.AppVersion }}
           name: opencti
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /dashboard
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /dashboard
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
           resources: 
             limits:
               memory: 2048Mi
