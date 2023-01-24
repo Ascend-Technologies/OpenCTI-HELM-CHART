@@ -3,6 +3,10 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ir
   namespace: {{ .Release.Namespace }}   
+{{- if .Values.OPENCTI_INGRESS_HOST_ANNOTATIONS }}
+  annotations:
+{{ toYaml .Values.OPENCTI_INGRESS_HOST_ANNOTATIONS | indent 4 }}  
+{{- end }}
 spec:
   tls:
     - hosts:
@@ -13,6 +17,9 @@ spec:
       http:
         paths:
         - path: /
-          backend:
-            serviceName: {{ .Release.Name }}-opencti-web
-            servicePort: 8080
+          pathType: Prefix
+          backend:        
+            service:
+              name: {{ .Release.Name }}-opencti-web
+              port: 
+                number: 8080
