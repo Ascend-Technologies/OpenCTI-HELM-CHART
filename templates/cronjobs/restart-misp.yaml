@@ -1,6 +1,6 @@
 {{ if .Values.CONNECTOR_MISP_ENABLED }}
 {{- range .Values.MISP_SERVERS }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: {{ $.Release.Name }}-deployment-restart-{{ .NAME }}

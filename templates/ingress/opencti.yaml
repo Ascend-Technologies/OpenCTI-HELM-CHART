@@ -1,9 +1,14 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ir
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}   
+{{- if .Values.OPENCTI_INGRESS_HOST_ANNOTATIONS }}
+  annotations:
+{{ toYaml .Values.OPENCTI_INGRESS_HOST_ANNOTATIONS | indent 4 }}  
+{{- end }}
 spec:
+  ingressClassName:  {{ .Values.OPENCTI_INGRESS_CLASS }}
   tls:
     - hosts:
       - {{ .Values.OPENCTI_INGRESS_HOST }}
@@ -13,6 +18,9 @@ spec:
       http:
         paths:
         - path: /
-          backend:
-            serviceName: {{ .Release.Name }}-opencti-web
-            servicePort: 8080
+          pathType: Prefix
+          backend:        
+            service:
+              name: {{ .Release.Name }}-opencti-web
+              port: 
+                number: 8080
