@@ -1,8 +1,8 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ir
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ .Release.Namespace }}   
 spec:
   tls:
     - hosts:
