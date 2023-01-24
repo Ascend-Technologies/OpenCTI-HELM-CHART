@@ -8,6 +8,7 @@ metadata:
 {{ toYaml .Values.OPENCTI_INGRESS_HOST_ANNOTATIONS | indent 4 }}  
 {{- end }}
 spec:
+  ingressClassName:  {{ .Values.OPENCTI_INGRESS_CLASS }}
   tls:
     - hosts:
       - {{ .Values.OPENCTI_INGRESS_HOST }}

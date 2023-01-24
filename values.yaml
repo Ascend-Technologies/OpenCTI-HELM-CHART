@@ -1,5 +1,6 @@
 # NGINX INGRESS OPTIONS
 OPENCTI_INGRESS_HOST: ""
+OPENCTI_INGRESS_CLASS: "nginx"
 OPENCTI_TLS_SECRET: ""
 OPENCTI_INGRESS_HOST_ANNOTATIONS: {}
 #  cert-manager.io/cluster-issuer: "lets-encrypt"
