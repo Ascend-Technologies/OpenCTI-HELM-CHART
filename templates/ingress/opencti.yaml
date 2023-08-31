@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}-ir
@@ -13,6 +13,9 @@ spec:
       http:
         paths:
         - path: /
+          pathType: Prefix
           backend:
-            serviceName: {{ .Release.Name }}-opencti-web
-            servicePort: 8080
+            service:
+              name: {{ .Release.Name }}-opencti-web
+              port: 
+                number: 8080
